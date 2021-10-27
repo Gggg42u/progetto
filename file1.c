@@ -33,4 +33,5 @@ int main(int argc, char ** argv)
 {
     printf("%lf", croissance_hetero(5,10));
     printf("%s","yo");
+    printf("µ_a: %f", croissance_auto(10, 3));
 }
