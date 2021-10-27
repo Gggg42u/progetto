@@ -27,7 +27,7 @@ double croissance_auto(double t, double TKN) {
 	double µmax_a = 0.85*exp(0.106*(t-20));
 	double ks_a = pow(10, 0.051*t - 1.158);
 	double µ_a = µmax_a * exp(0.098(t-15)) * TKN/(ks + TKN);
-	double greco = 1;
+	double greco = 0;
 	
 int main(int argc, char ** argv)
 {
