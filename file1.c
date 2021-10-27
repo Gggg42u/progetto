@@ -32,4 +32,5 @@ double croissance_auto(double t, double TKN) {
 int main(int argc, char ** argv)
 {
     printf("%lf", croissance_hetero(5,10));
+    printf("%s","yo");
 }
