@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -43,8 +44,22 @@ double croissance_auto(double t, double TKN) { 			// t [jours]
 	double µ_min_a = pow((µ_a + 1),1.0/(24*60))-1;
 	return µ_min_a;										// µ_min_h [1/min]
 }
+
+double production(double bact, double t, double Q, double COD_in ){
+	double COD = COD_affluant(Q,COD_in);
+	while ( COD > 30){
+		double bact_prod = croissance_hetero(t,COD) * bact;
+		COD -= bact_prod * 0.67;
+		bact += bact_prod;
+	}
+	return bact;
+}
+	
 	
 int main(int argc, char ** argv){
+	
+	double a = production(300,1,5,10000);
+	printf("%f\n",a);
 	
 	double TKN_aff = TKN_affluant(5, 30);
 	printf("Quantité de TKN: %.2f [g/min]\n", TKN_aff);
