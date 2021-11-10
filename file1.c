@@ -47,18 +47,20 @@ double croissance_auto(double t, double TKN) { 			// t [jours]
 
 double production(double bact, double t, double Q, double COD_in ){
 	double COD = COD_affluant(Q,COD_in);
+	double i = 0;
 	while ( COD > 30){
 		double bact_prod = croissance_hetero(t,COD) * bact;
 		COD -= bact_prod * 0.67;
 		bact += bact_prod;
+		i += 1;
 	}
-	return bact;
+	return i;
 }
 	
 	
 int main(int argc, char ** argv){
 	
-	double a = production(300,1,5,10000);
+	double a = production(300,1,5,340);
 	printf("%f\n",a);
 	
 	double TKN_aff = TKN_affluant(5, 30);
