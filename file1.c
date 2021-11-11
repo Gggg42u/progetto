@@ -45,22 +45,28 @@ double croissance_auto(double t, double TKN) { 			// t [jours]
 	return µ_min_a;										// µ_min_h [1/min]
 }
 
-double production(double bact, double t, double Q, double COD_in ){
+double production(double bact_hetero, double bact_auto, double t, double Q, double COD_in, double TKN_in ){
 	double COD = COD_affluant(Q,COD_in);
+	double TKN = TKN_affluant(Q,TKN_in);
 	double i = 0;
-	while ( COD > 30){
-		double bact_prod = croissance_hetero(t,COD) * bact;
-		COD -= bact_prod * 0.67;
-		bact += bact_prod;
+	double TKN_rem = 0;
+	while ( COD > 30 || TKN > 2){
+		double bact_prod_hetero = croissance_hetero(t,COD) * bact_hetero;
+		double bact_prod_auto = croissance_auto(t,TKN) * bact_auto;
+		COD -= bact_prod_hetero * 0.67;
+		TKN_rem = (bact_prod_hetero * 0.001675) + (bact_prod_auto * 6.19);
+		TKN -= TKN_rem;
+		bact_auto += bact_prod_auto;
+		bact_hetero += bact_prod_hetero;
 		i += 1;
 	}
-	return i;
+	return bact_auto;
 }
 	
 	
 int main(int argc, char ** argv){
 	
-	double a = production(300,1,5,340);
+	double a = production(300,300,1,5,340,30);
 	printf("%f\n",a);
 	
 	double TKN_aff = TKN_affluant(5, 30);
