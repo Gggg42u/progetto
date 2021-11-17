@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -9,25 +8,25 @@
 
 //Calcul des grammes par minute de TKN dans l'affluant
 
-double TKN_affluant(double Q, double TKN_in){ 			//Q : débit [m^3/min], TKN [g/m^3], T [°C] 
-												   
-	double TKN_aff = Q * TKN_in;						//TKN_aff [g/min]		
+double TKN_affluant(double Qa, double TKN_in){ //Qa : débit affluant [m^3/min], TKN [g/m^3]
+							
+	double TKN_aff = Qa * TKN_in;						//TKN_aff [g/min]		
 	return TKN_aff;
 }
 
 //Calcul des grammes par minute de COD dans l'affluant
 
-double COD_affluant(double Q, double COD_in){ 			//Q : débit [m^3/min], COD [g/m^3], T [°C] 
+double COD_affluant(double Qa, double COD_in){ 			//Qa : débit affluant [m^3/min], COD [g/m^3]
 										   
-	double COD_aff = Q * COD_in;						//COD_aff [g/min]		
+	double COD_aff = Qa * COD_in;						//COD_aff [g/min]		
 	return COD_aff;
 }
 
 //Calcul du taux de croissance des bactéries héterotrophes 
 
-double croissance_hetero(double t, double COD_aff){ 	// t [jours]
+double croissance_hetero(double T, double COD_aff){ 	// T [°C]
 
-	double µmax_h = 6.0 * exp(0.0693*t-1.386); ; 		// µmax_h [1/jour]
+	double µmax_h = 6.0 * exp(0.0693*T-1.386); ; 		// µmax_h [1/jour]
 	double ks_h = 20;
 	double µ_h = µmax_h * (COD_aff/(ks_h + COD_aff)); ; // µ_h [1/jour]
 	double µ_min_h = pow((µ_h + 1),1.0/(24*60))-1;
@@ -36,7 +35,7 @@ double croissance_hetero(double t, double COD_aff){ 	// t [jours]
 
 //Calcul du taux de croissance des bactéries autotrophes 
 
-double croissance_auto(double t, double TKN) { 			// t [jours]
+double croissance_auto(double T, double TKN) { 			// T [°C]
 	
 	double µmax_a = 0.85*exp(0.106*(t-20));				// µmax_a [1/jour]
 	double ks_a = pow(10, 0.051*t - 1.158);
@@ -45,40 +44,32 @@ double croissance_auto(double t, double TKN) { 			// t [jours]
 	return µ_min_a;										// µ_min_h [1/min]
 }
 
-double production(double bact_hetero, double bact_auto, double t, double Q, double COD_in, double TKN_in ){
-	double COD = COD_affluant(Q,COD_in);
-	double TKN = TKN_affluant(Q,TKN_in);
-	double i = 0;
-	double TKN_rem = 0;
-	while ( COD > 30 || TKN > 2){
-		double bact_prod_hetero = croissance_hetero(t,COD) * bact_hetero;
-		double bact_prod_auto = croissance_auto(t,TKN) * bact_auto;
-		COD -= bact_prod_hetero * 0.67;
-		TKN_rem = (bact_prod_hetero * 0.001675) + (bact_prod_auto * 6.19);
-		TKN -= TKN_rem;
-		bact_auto += bact_prod_auto;
-		bact_hetero += bact_prod_hetero;
-		i += 1;
+// Explication des fluxes
+// Q affluent = Qa
+// ( Q entre aération et décantation = Qi = Qa + Qr )
+// Q boues recyclées = Qr 
+// Q boues enlevées (purge) = Qp = Qa - Qe
+// Q effluent = Qe
+
+// V = Volume bacin aération [m3]
+
+double total(double Qa, double Qe, double Qr, double V, double TKNa, double CDOa) {
 	}
-	return bact_auto;
-}
-	
-	
+
 int main(int argc, char ** argv){
 	
-	double a = production(300,300,1,5,340,30);
-	printf("%f\n",a);
-	
-	double TKN_aff = TKN_affluant(5, 30);
+	double TKNa = TKN_affluant(5, 30);					// TKN_affluant(Qa [m^3/min], TKN_in [g/m^3]) 
 	printf("Quantité de TKN: %.2f [g/min]\n", TKN_aff);
 	
-	double COD_aff = COD_affluant(340, 30);
+	double CODa = COD_affluant(5, 340);					// TKN_affluant(Qa [m^3/min], COD_in [g/m^3]) 
 	printf("Quantité de COD: %.2f [g/min]\n", COD_aff);
 	
-	double µ_min_h = croissance_hetero(100, 340);
+	double µ_min_h = croissance_hetero(25, 340);
 	printf("Taux de croissance par minute des bact. hétérotrophes: %.2f [1/min]\n", µ_min_h);
 	
-	double µ_min_a = croissance_auto(100, 30);
+	double µ_min_a = croissance_auto(25, 30);
 	printf("Taux de croissance par minute des bact. autotrophes: %.2f [1/min]\n", µ_min_a);
+	
+	
 	
 }
