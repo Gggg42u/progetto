@@ -25,9 +25,9 @@ void COD_TKN_actualise(double V, double Qa, double COD_aff, double TKN_aff, doub
 		double µ_min_he = pow((µ_he + 1),1.0/(24*60))-1;
 		
 		//Calcul du taux de croissance des bactéries autotrophes 	
-		double µmax_au = 0.85*exp(0.106*(t-20));						// µmax_au [1/jour]
-		double ks_au = pow(10, 0.051*t - 1.158);
-		double µ_au = µmax_au * exp(0.098*(t-15)) * TKN/(ks_au + TKN);	// µ_au [1/jour]
+		double µmax_au = 0.85*exp(0.106*(T-20));						// µmax_au [1/jour]
+		double ks_au = pow(10, 0.051*T - 1.158);
+		double µ_au = µmax_au * exp(0.098*(T-15)) * TKN/(ks_au + TKN);	// µ_au [1/jour]
 		double µ_min_au = pow((µ_au + 1),1.0/(24*60))-1;
 	
 		// Calcul grammes de bactéres actuels dans le bacin
