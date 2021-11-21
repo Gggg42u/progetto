@@ -18,6 +18,7 @@ void COD_TKN_actualise(double V, double Qa, double COD_aff, double TKN_aff, doub
 	
 	for (int i=0; i<t; i++) {
 		
+		
 		//Calcul du taux de croissance des bactéries héterotrophes 
 		double µmax_he = 6.0 * exp(0.0693*T-1.386); ; 					// µmax_he [1/jour]
 		double ks_he = 20;
@@ -42,7 +43,14 @@ void COD_TKN_actualise(double V, double Qa, double COD_aff, double TKN_aff, doub
 		
 		COD += (COD_aff * Qa / V) - (g_bacteres_he * 0.67 / V) ;									// [g/m3]
 		TKN += (TKN_aff * Qa / V) - (g_bacteres_he * 0.01675 / V) - (g_bacteres_au * 6.19 / V) ;	// [g/m3]
-		printf("Les g de bact he: %f\n", g_bacteres_he);
+				
+		if (COD < 0.0) {
+			COD = 0;
+			}
+			
+		if (TKN < 0.0){
+			TKN = 0;
+		}
 
 	}
 	printf("Le niveau de COD est: %f\n", COD);
