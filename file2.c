@@ -66,8 +66,6 @@ int main(int argc, char * argv[]){
 	
 }
 
-// Ad un certo punto stampa "NAN" = Not A Number e deve probabilmente esserci un operazione 
-// che fa flascare ad un certo punto (come radice di un numero negativo)
 
 // Manca il fatto che vi sia un flusso esterno che rientra; implica una perdita di g di batteri nel
 // volume del bacino, il che diminuisce la loro conc e quindi va preso in considerazione
